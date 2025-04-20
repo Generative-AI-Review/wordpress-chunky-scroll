@@ -1,0 +1,103 @@
+.chunky-scroll-wrapper{
+    width:100%;            /* <-- NEW */
+    max-width:100%;        /* <-- NEW (safety for flex items) */
+}
+
+/* 2️⃣  Let the table be wider than the viewport                    */
+.chunky-scroll-wrapper > table{
+    width:max-content;     /* intrinsic width; expand to fit cells   */
+    /* Fallback if an older browser ignores max-content:            */
+    /* min-width:1200px;  or whatever baseline you like             */
+}
+.chunky-scroll-wrapper::-webkit-scrollbar{display:none;} /* Blink/WebKit */
+
+.fake-scrollbar{
+	position:sticky;
+	height:31px;                  /* make bar chunky */
+	background:#ddd;
+	z-index:2;
+	cursor:pointer;
+	touch-action: none;
+}
+
+.fake-scrollbar.top{top:0;}
+.fake-scrollbar.bottom{bottom:0;margin-top:4px;}
+
+.fake-scrollbar .thumb{
+	position:absolute;
+	top:0;left:0;
+	height:100%;
+	background:#888;
+	border-radius:9px;
+	min-width:32px;               /* never vanish */
+}
+
+/* visual affordance */
+.chunky-scroll-wrapper{
+    cursor: grab;
+}
+.chunky-scroll-wrapper.dragging{
+    cursor: grabbing;
+    user-select:none;
+}
+
+
+/* keep the Gutenberg wrapper itself from stretching wider than the column */
+figure.chunky-scroll{
+    display:block;        /* avoid flex quirks                       */
+    width:100% !important;
+    max-width:100% !important;
+    overflow-x:hidden;    /* clip anything wider – forces viewport   */
+}
+
+/* make sure our internal viewport also sticks to the column width */
+.chunky-scroll-wrapper{
+    width:100% !important;
+    max-width:100% !important;
+    overflow-x:auto;      /* already present but add !important for safety */
+    scrollbar-width:none;
+}
+
+
+.fake-scrollbar .thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  white-space: nowrap;
+  /* ⇨ prevent text spill‑out ⇦ */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* prefix/suffix arrows */
+.fake-scrollbar .thumb::before {
+  content: '← ';
+}
+.fake-scrollbar .thumb::after {
+  content: ' →';
+}
+
+/* if you want bigger arrows or different glyphs, just swap the Unicode */
+
+/* book‑end buttons */
+.scroll-btn{
+  width:30px; height:30px;
+  background:#bbb;
+  color:#222;
+  font-weight:bold;
+  font-size:10px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  user-select:none;
+}
+
+/* row that contains start‑btn · track · end‑btn */
+.fake-scroll-row{
+  display:flex;               /* lets the track flex‑fill remaining width */
+  gap:4px;                    /* small breathing room */
+}
+.fake-scroll-row.top    { top:0;    position:sticky; }
+.fake-scroll-row.bottom { bottom:0; position:sticky; margin-top:4px; }
+.fake-scroll-row .fake-scrollbar{ flex:1; } /* track flex‑fills */
